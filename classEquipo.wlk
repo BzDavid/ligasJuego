@@ -17,10 +17,7 @@ object liga {
         participantes.sortBy({equipoUno, equipoDos => equipoUno.puntos() > equipoDos.puntos()})
     }
 
-    method contraQuienPuedeJugar_EnLaLista_(unEquipo, listaDeEquipos) = listaDeEquipos.filter({equipo => equipo.puedeJugarContra_(unEquipo)})
-
-
-    method lista_SinElPrimeroNiElUltimo(unaLista) = unaLista.remove(unaLista.first()).remove(unaLista.last())
+    // method contraQuienPuedeJugar_EnLaLista_(unEquipo, listaDeEquipos) = listaDeEquipos.filter({equipo => equipo.puedeJugarContra_(unEquipo)})
 
     method estadisticasDeEquipos() {
         const estadisticasADevolver = []
@@ -41,6 +38,10 @@ object liga {
         })
         //console.println("Posición de los participantes: " + self.participantesPorNombre())
         //console.println("Puntos de los participantes: " + self.participantesPorPuntos())
+    }
+
+    method reiniciarLiga() {
+        participantes.forEach({equipo => equipo.reiniciarEstadisticas()})
     }
 }
 
@@ -84,22 +85,52 @@ object partidos {
 class Equipo {
     const property nombre
 
-    const property numeroID
+    // const property numeroID
 
-    const property equiposConLosQueSeJugo = [self]
+    // const property equiposConLosQueSeJugo = [self]
 
-    method nombreDeEquiposConLosQueSeJugo() = equiposConLosQueSeJugo.map({equipo => equipo.nombre()})
+    // method nombreDeEquiposConLosQueSeJugo() = equiposConLosQueSeJugo.map({equipo => equipo.nombre()})
     
-    var property puntos = 0
+    var puntos = 0
 
-    var property golesEnPartido = 0
+    var golesAFavor = 0
 
-    var property partidosJugados = 0 
+    var golesEnContra = 0
+
+    var golesEnPartido = 0
+
+    var partidosJugados = 0 
+
+    method puntos() = puntos
+
+    method golesAFavor() = golesAFavor
+
+    method golesEnContra() = golesEnContra
+
+    method golesEnPartido() = golesEnPartido
+
+    method diferenciaDeGoles() = golesAFavor - golesEnContra
+
+    method partidosJugados() = partidosJugados
 
     method jugarPartidoContra_(unRival) {
         golesEnPartido = resultados.generar()
         partidosJugados += 1
-        equiposConLosQueSeJugo.add(unRival)
+        golesAFavor += golesEnPartido
+        // equiposConLosQueSeJugo.add(unRival)
+        unRival.sumarGolesEnContra(golesEnPartido)
+    }
+
+    method sumarGolesEnContra(goles) {
+        golesEnContra += goles
+    }
+
+    method reiniciarEstadisticas() {
+        puntos = 0
+        golesAFavor = 0
+        golesEnContra = 0
+        golesEnPartido = 0
+        partidosJugados = 0
     }
 
     method gana() {
@@ -110,7 +141,7 @@ class Equipo {
         puntos += 1
     }
 
-    method puedeJugarContra_(unRival) = not equiposConLosQueSeJugo.contains(unRival)
+    // method puedeJugarContra_(unRival) = not equiposConLosQueSeJugo.contains(unRival)
 }
 
 object resultados {

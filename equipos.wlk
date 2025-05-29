@@ -1,52 +1,76 @@
 import classEquipo.*
 
-const barco = new Equipo(
-    nombre = "Barco",
-    numeroID = 1
-)
+const calvernaSP = new Equipo(
+    nombre = "Calverna"
+) //Antes "Barco"
 
-const avion = new Equipo(
-    nombre = "Avión",
-    numeroID = 2
-)
+const monteluzRM = new Equipo(
+    nombre = "Monteluz"
+) //Antes "Avión"
 
-const tren = new Equipo(
-    nombre = "Tren",
-    numeroID = 3
-)
+const streinbruckUN = new Equipo(
+    nombre = "Streinbruck"
+) //Antes "Tren"
 
-const coche = new Equipo(
-    nombre = "Coche",
-    numeroID = 4
-)
+const rodanorATH = new Equipo(
+    nombre = "Rodanor"
+) //Antes "Coche"
 
-const bicicleta = new Equipo(
-    nombre = "Bicicleta",
-    numeroID = 5
-)
+const novigradFK = new Equipo(
+    nombre = "Novigrad"
+) // Antes "Bicicleta"
 
-const moto = new Equipo(
-    nombre = "Moto",
-    numeroID = 6
-)
+const lormontST = new Equipo(
+    nombre = "Lormont"
+) // Antes "Moto"
 
-const silenciadores = new Equipo(
-    nombre = "Silenciadores",
-    numeroID = 7
-)
+const boravikFC = new Equipo(
+    nombre = "Boravik"
+) // Antes "Silenciadores"
 
-const fumetas = new Equipo(
-    nombre = "Fumetas",
-    numeroID = 8
-)
+const veltsenDIN = new Equipo(
+    nombre = "Veltsen"
+) // Antes "Fumetas"
 
 const listaFinal = [
-    barco,
-    avion,
-    tren,
-    coche,
-    bicicleta,
-    moto,
-    silenciadores,
-    fumetas
+    calvernaSP,
+    monteluzRM,
+    streinbruckUN,
+    rodanorATH,
+    novigradFK,
+    lormontST,
+    boravikFC,
+    veltsenDIN
 ]
+
+const victoriaFC = new Equipo(
+    nombre = "Victoria"
+)
+
+const valdonzaFC = new Equipo(
+    nombre = "Valdonza"
+)
+
+const cernoviaRM = new Equipo(
+    nombre = "Cernovia"
+)
+
+const pardenosAS = new Equipo(
+    nombre = "Pardenos"
+)
+
+const tiranaSC = new Equipo(
+    nombre = "Tirana"
+)
+
+const ferrosurCF = new Equipo(
+    nombre = "Ferrosur"
+)
+
+const dravusATH = new Equipo(
+    nombre = "Dravus"
+)
+
+const rogarVK = new Equipo(
+    nombre = "Rogar"
+)
