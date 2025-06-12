@@ -1,76 +1,117 @@
 import classEquipo.*
 
-const calvernaSP = new Equipo(
+object liga1 inherits Liga(participantes = listaPrimera) {
+    override method jugarLiga() {
+        super()
+        console.println("¡El campeón de la liga es: " + self.participantes().first().nombre() + "!")
+        console.println(self.participantes().get(self.participantes().size() - 2).nombre() + " va a jugar la promoción para permanecer en la liga!")
+        console.println("El equipo que desciende es: " + self.participantes().last().nombre())
+    }
+
+    method queEquiposDescienden() = [self.participantes().get(self.participantes().size() - 2).nombre(), self.participantes().last().nombre()]
+
+    method jugarPromocion() {
+        2.times({i =>
+            resultados.jugarPartido(
+                self.participantes().get(self.participantes().size() - 2),
+                liga2.participantes().get(1))
+            })
+
+    }
+}
+
+object liga2 inherits Liga(participantes = listaSegunda) {
+    override method jugarLiga() {
+        super()
+        console.println("Campeón y ascenso de la liga: " + self.participantes().first().nombre() + "!")
+        console.println("¡" + self.participantes().get(1).nombre() + " deberá jugar la promoción para ascender!")
+    }
+    
+    method queEquiposAscienden() = participantes.take(2).map({equipo => equipo.nombre()})
+}
+
+const calverna = new Equipo(
     nombre = "Calverna"
 ) //Antes "Barco"
 
-const monteluzRM = new Equipo(
+const monteluz = new Equipo(
     nombre = "Monteluz"
 ) //Antes "Avión"
 
-const streinbruckUN = new Equipo(
-    nombre = "Streinbruck"
+const streinbruck = new Equipo(
+    nombre = "Streinbr"
 ) //Antes "Tren"
 
-const rodanorATH = new Equipo(
+const rodanor = new Equipo(
     nombre = "Rodanor"
 ) //Antes "Coche"
 
-const novigradFK = new Equipo(
+const novigrad = new Equipo(
     nombre = "Novigrad"
 ) // Antes "Bicicleta"
 
-const lormontST = new Equipo(
+const lormont = new Equipo(
     nombre = "Lormont"
 ) // Antes "Moto"
 
-const boravikFC = new Equipo(
+const boravik = new Equipo(
     nombre = "Boravik"
 ) // Antes "Silenciadores"
 
-const veltsenDIN = new Equipo(
+const veltsen = new Equipo(
     nombre = "Veltsen"
 ) // Antes "Fumetas"
 
-const listaFinal = [
-    calvernaSP,
-    monteluzRM,
-    streinbruckUN,
-    rodanorATH,
-    novigradFK,
-    lormontST,
-    boravikFC,
-    veltsenDIN
+const listaPrimera = [
+    calverna,
+    monteluz,
+    streinbruck,
+    rodanor,
+    novigrad,
+    lormont,
+    boravik,
+    tirana
 ]
 
-const victoriaFC = new Equipo(
+const listaSegunda = [
+    victoria,
+    valdonza,
+    cernovia,
+    pardenos,
+    ferrosur,
+    dravus,
+    rogar,
+    veltsen
+]
+
+const victoria = new Equipo(
     nombre = "Victoria"
 )
 
-const valdonzaFC = new Equipo(
+const valdonza = new Equipo(
     nombre = "Valdonza"
 )
 
-const cernoviaRM = new Equipo(
+const cernovia = new Equipo(
     nombre = "Cernovia"
 )
 
-const pardenosAS = new Equipo(
+const pardenos = new Equipo(
     nombre = "Pardenos"
 )
 
-const tiranaSC = new Equipo(
+const tirana = new Equipo(
     nombre = "Tirana"
 )
 
-const ferrosurCF = new Equipo(
+const ferrosur = new Equipo(
     nombre = "Ferrosur"
 )
 
-const dravusATH = new Equipo(
+const dravus = new Equipo(
     nombre = "Dravus"
 )
 
-const rogarVK = new Equipo(
+const rogar = new Equipo(
     nombre = "Rogar"
 )

@@ -1,6 +1,6 @@
 import equipos.*
-object liga {
-    const participantes = []
+class Liga {
+    const property participantes 
 
     method participantesPorNombre() = participantes.map({equipo => equipo.nombre()})
 
@@ -13,31 +13,57 @@ object liga {
         partidos.actualizarEquiposParticipantes(participantes)
     }
 
+    method enviarActualizacion() {
+        partidos.actualizarEquiposParticipantes(participantes)
+        //Ya que los partidos se simulan en el objeto partidos, le mando mi lista de participantes para que el objeto trabaje con su propia copia de la lista. Esto es "actualizar" los equipos.
+    }
+
+    method eliminarParticipante(unEquipo) {
+        participantes.remove(unEquipo)
+    }
+
     method ordenarPorPuntos() {
         participantes.sortBy({equipoUno, equipoDos => equipoUno.puntos() > equipoDos.puntos()})
     }
 
-    // method contraQuienPuedeJugar_EnLaLista_(unEquipo, listaDeEquipos) = listaDeEquipos.filter({equipo => equipo.puedeJugarContra_(unEquipo)})
-
-    method estadisticasDeEquipos() {
-        const estadisticasADevolver = []
-        estadisticasADevolver.clear()
-        (0 .. participantes.size() - 1).asList().forEach({i =>
-            estadisticasADevolver.add(self.participantesPorNombre().get(i))
-            estadisticasADevolver.add(self.participantesPorPuntos().get(i))
-        })
-        return estadisticasADevolver
+    method imprimirEstadoDeLiga() {
+        self.ordenarPorPuntos()
+        console.println("Estado de la liga: ")
+        console.println("")
+        self.imprimirEstadisticasDeEquipos()
     }
 
-    method jugarLiga() {
+    method imprimirEstadisticasDeEquipos() {
+        var posicion = 0
+        participantes.forEach({equipo =>
+            posicion += 1
+            console.println([posicion] + equipo.stats())
+        })
+        posicion = 0
+    }
+
+    method jugarLigaPV() {
+        self.enviarActualizacion()
+        self.jugarLigaSV()
+        //Es muy anti-intuitivo, pero es así porque en la primera vuelta actualizo los equipos, y en la segunda no.
+    }
+
+    method jugarLigaSV() {
         (participantes.size() - 1).times({i =>
             console.println("Inicio de la fecha " + i + " ==========================")
             partidos.jugarFecha()
-            console.println("Estado de la liga: ")
-            console.println(self.estadisticasDeEquipos())
+            console.println("")
+            self.imprimirEstadoDeLiga()
         })
-        //console.println("Posición de los participantes: " + self.participantesPorNombre())
-        //console.println("Puntos de los participantes: " + self.participantesPorPuntos())
+        //Acá se juega una parte de la liga. La única diferencia que tiene es que no se actualizan los equipos, ya que de eso se encarga primera vuelta. 
+    }
+
+    method jugarLiga() {
+        self.jugarLigaPV()
+        console.println("")
+        console.println("Fin de la primera vuelta ==========================")
+        console.println("")
+        self.jugarLigaSV()
     }
 
     method reiniciarLiga() {
@@ -45,14 +71,13 @@ object liga {
     }
 }
 
+
 object partidos {
     const property participantes = []
 
     const property primerSegmentoDeEquipos = []
 
     const property segundoSegmentoDeEquipos = []
-
-    method participantes() = liga.participantesPorClase()
 
     method primerSegmentoPorNombre() = primerSegmentoDeEquipos.map({equipo => equipo.nombre()})
 
@@ -71,7 +96,6 @@ object partidos {
         const listaDeEnfrentamientos = (0 .. (participantes.size() / 2 - 1)).asList()
         listaDeEnfrentamientos.forEach({i => resultados.jugarPartido(primerSegmentoDeEquipos.get(i), segundoSegmentoDeEquipos.get(i))})
         self.ordenarSegmentosParaSiguienteFecha()
-        liga.ordenarPorPuntos()
     }
 
     method ordenarSegmentosParaSiguienteFecha() {
@@ -84,12 +108,6 @@ object partidos {
 
 class Equipo {
     const property nombre
-
-    // const property numeroID
-
-    // const property equiposConLosQueSeJugo = [self]
-
-    // method nombreDeEquiposConLosQueSeJugo() = equiposConLosQueSeJugo.map({equipo => equipo.nombre()})
     
     var puntos = 0
 
@@ -113,11 +131,14 @@ class Equipo {
 
     method partidosJugados() = partidosJugados
 
+    method statGoles() = [golesAFavor, golesEnContra, self.diferenciaDeGoles()]
+
+    method stats() = [nombre, puntos, self.diferenciaDeGoles()]
+
     method jugarPartidoContra_(unRival) {
         golesEnPartido = resultados.generar()
         partidosJugados += 1
         golesAFavor += golesEnPartido
-        // equiposConLosQueSeJugo.add(unRival)
         unRival.sumarGolesEnContra(golesEnPartido)
     }
 
@@ -140,8 +161,6 @@ class Equipo {
     method empata() {
         puntos += 1
     }
-
-    // method puedeJugarContra_(unRival) = not equiposConLosQueSeJugo.contains(unRival)
 }
 
 object resultados {
@@ -174,6 +193,16 @@ object resultados {
             //mensaje.ganaVisitante()
         }
         mensaje.mostrarResultado(equipoLocal, equipoVisitante)
+    }
+
+    method tirarUnPenal() {
+        const resultado = self.rango()
+        if (resultado < 3) {
+            return 0 
+        } 
+        else {
+            return 1 
+        }
     }
 }
 
