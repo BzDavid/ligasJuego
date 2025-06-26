@@ -64,7 +64,7 @@ class Liga {
     method jugarUnaVuelta() {
         (participantes.size() - 1).times({i =>
             console.println("Inicio de la fecha " + i + " ==========================")
-            self.jugarFecha()
+            self.jugarFecha((0 .. (participantes.size() / 2 - 1)).asList())
             console.println("")
             self.imprimirEstadoDeLiga()
         })
@@ -82,9 +82,8 @@ class Liga {
         participantes.forEach({equipo => equipo.reiniciarEstadisticas()})
     }
 
-    method jugarFecha() {
-        const listaDeEnfrentamientos = (0 .. (participantes.size() / 2 - 1)).asList()
-        listaDeEnfrentamientos.forEach({i => resultados.jugarPartido(primerSegmentoDeEquipos.get(i), segundoSegmentoDeEquipos.get(i))})
+    method jugarFecha(listaDeNumeroDeEnfrentamientos) {
+        listaDeNumeroDeEnfrentamientos.forEach({i => resultados.jugarPartido(primerSegmentoDeEquipos.get(i), segundoSegmentoDeEquipos.get(i))})
         self.ordenarSegmentosParaSiguienteFecha()
     }
 
@@ -220,7 +219,7 @@ object resultados {
     method jugarProrroga(equipoLocal, equipoVisitante) {
         equipoLocal.jugarProrroga()
         equipoVisitante.jugarProrroga()
-        console.println("Prórroga: ")
+        console.println("Es empate, procediendo a la prórroga: ")
         mensaje.mostrarResultado(equipoLocal, equipoVisitante)
         if (equipoLocal.golesEnPartido() > equipoVisitante.golesEnPartido()) {
             return equipoLocal
@@ -313,7 +312,8 @@ object mensaje {
 
     method mostrarListaDePenales_DeEquipo_(unaListaDePenales, unEquipo) {
         console.println(
-            unEquipo.nombre() + 
+            unEquipo.nombre() +
+            ": " +
             unaListaDePenales.map({numero => if(numero == 1) "🟢" else "🔴"})
         )
     }

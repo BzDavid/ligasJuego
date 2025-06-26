@@ -38,6 +38,6 @@ object liga2 inherits Liga(participantes = listaSegunda) {
     method queEquiposAscienden() = participantes.take(2).map({equipo => equipo.nombre()})
 }
 
-object copa1 inherits Copa(participantes = listaPrimera/* + listaSegunda*/) {
+object copa1 inherits Copa(participantes = listaPrimera) {}
 
-}
+object copa2 inherits Copa(participantes = listaSegunda) {}
