@@ -52,7 +52,7 @@ class Liga {
         posicion = 0
     }
 
-    method imprimirEstadisticaTotalesDeEquipos() {
+    method imprimirEstadisticasTotalesDeEquipos() {
         var posicion = 0
         participantes.forEach({equipo =>
             posicion += 1
@@ -141,6 +141,14 @@ class Equipo {
         unRival.sumarGolesEnContra(golesEnPartido)
     }
 
+    method jugarPartidoEspecial() {
+        golesEnPartido = resultados.generar()
+    }
+
+    method jugarProrroga() {
+        golesEnPartido = 0.max(resultados.generar() - 3)
+    }
+
     method sumarGolesEnContra(goles) {
         golesEnContra += goles
     }
@@ -194,13 +202,94 @@ object resultados {
         mensaje.mostrarResultado(equipoLocal, equipoVisitante)
     }
 
-    method tirarUnPenal() {
-        const resultado = self.rango()
-        if (resultado < 3) {
-            return 0 
+    method ganadorEntre(equipoLocal, equipoVisitante) {
+        equipoLocal.jugarPartidoEspecial()
+        equipoVisitante.jugarPartidoEspecial()
+        mensaje.mostrarResultado(equipoLocal, equipoVisitante)
+        if (equipoLocal.golesEnPartido() > equipoVisitante.golesEnPartido()) {
+            return equipoLocal
+        } 
+        else if (equipoLocal.golesEnPartido() == equipoVisitante.golesEnPartido()) {
+            return self.jugarProrroga(equipoLocal, equipoVisitante)
         } 
         else {
-            return 1 
+            return equipoVisitante
+        }
+    }
+
+    method jugarProrroga(equipoLocal, equipoVisitante) {
+        equipoLocal.jugarProrroga()
+        equipoVisitante.jugarProrroga()
+        console.println("Prórroga: ")
+        mensaje.mostrarResultado(equipoLocal, equipoVisitante)
+        if (equipoLocal.golesEnPartido() > equipoVisitante.golesEnPartido()) {
+            return equipoLocal
+        } 
+        else if (equipoLocal.golesEnPartido() == equipoVisitante.golesEnPartido()) {
+            return resultadosPenales.jugarTandaDePenales(equipoLocal, equipoVisitante)
+        } 
+        else {
+            return equipoVisitante
+        }
+    }
+}
+
+object resultadosPenales {
+    const property golesLocal = []
+
+    const property golesVisitante = []
+
+    method golesTotalesLocal() = golesLocal.sum()
+
+    method golesTotalesVisitante() = golesVisitante.sum()
+
+    method jugarTandaDePenales(equipoLocal, equipoVisitante) {
+        self.reiniciarTandaDePenales()
+        5.times({i =>
+            self.jugarUnaRondaDeTandaDePenales()
+        })
+        self.jugarUnaRondaMasDePenalesSiEsNecesario(equipoLocal, equipoVisitante)
+        console.println("Tanda de penales: ")
+        self.mostrarResultadosDePenales(equipoLocal, equipoVisitante)
+        return self.quienGanoTandaDePenales(equipoLocal, equipoVisitante)
+    }
+
+    method reiniciarTandaDePenales() {
+        golesLocal.clear()
+        golesVisitante.clear()
+    }
+
+    method jugarUnaRondaMasDePenalesSiEsNecesario(equipoLocal, equipoVisitante) {
+        if (self.golesTotalesLocal() == self.golesTotalesVisitante()) {
+            self.jugarUnaRondaDeTandaDePenales()
+            self.jugarUnaRondaMasDePenalesSiEsNecesario(equipoLocal, equipoVisitante)
+        }
+    }
+
+    method jugarUnaRondaDeTandaDePenales() {
+        golesLocal.add(self.esGolDePenal_(resultados.rango()))
+        golesVisitante.add(self.esGolDePenal_(resultados.rango()))
+    }
+
+    method mostrarResultadosDePenales(equipoLocal, equipoVisitante) {
+        mensaje.mostrarListaDePenales_DeEquipo_(golesLocal, equipoLocal)
+        mensaje.mostrarListaDePenales_DeEquipo_(golesVisitante, equipoVisitante)
+    }
+
+    method quienGanoTandaDePenales(equipoLocal, equipoVisitante) {
+        if (self.golesTotalesLocal() > self.golesTotalesVisitante()) {
+            return equipoLocal
+        }
+        else {
+            return equipoVisitante
+        }
+    }
+
+    method esGolDePenal_(numero) {
+        if (numero > 2) {
+            return 1
+        } else {
+            return 0
         }
     }
 }
@@ -220,5 +309,12 @@ object mensaje {
 
     method mostrarResultado(primerEquipo, segundoEquipo) {
         console.println(primerEquipo.nombre() + " " + [primerEquipo.golesEnPartido()] + " - " + [segundoEquipo.golesEnPartido()] + " " + segundoEquipo.nombre())
+    }
+
+    method mostrarListaDePenales_DeEquipo_(unaListaDePenales, unEquipo) {
+        console.println(
+            unEquipo.nombre() + 
+            unaListaDePenales.map({numero => if(numero == 1) "🟢" else "🔴"})
+        )
     }
 }

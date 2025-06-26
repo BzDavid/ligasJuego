@@ -1,5 +1,27 @@
 import classEquipo.*
 
+const listaPrimera = [
+    calverna,
+    monteluz,
+    streinbruck,
+    rodanor,
+    novigrad,
+    lormont,
+    tirana,
+    cernovia
+]
+
+const listaSegunda = [
+    victoria,
+    valdonza,
+    boravik,
+    pardenos,
+    ferrosur,
+    dravus,
+    rogar,
+    veltsen
+]
+
 const calverna = new Equipo(
     nombre = "Calverna"
 ) //Antes "Barco"
@@ -32,27 +54,7 @@ const veltsen = new Equipo(
     nombre = "Veltsen"
 ) // Antes "Fumetas"
 
-const listaPrimera = [
-    calverna,
-    monteluz,
-    streinbruck,
-    rodanor,
-    novigrad,
-    lormont,
-    boravik,
-    tirana
-]
 
-const listaSegunda = [
-    victoria,
-    valdonza,
-    cernovia,
-    pardenos,
-    ferrosur,
-    dravus,
-    rogar,
-    veltsen
-]
 
 const victoria = new Equipo(
     nombre = "Victoria"

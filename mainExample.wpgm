@@ -1,11 +1,13 @@
 import wollok.game.*
-
+import equipos.*
+import ligas.*
 import classEquipo.*
 
 program PepitaGame {
 	game.title("Pepita")
 	game.height(10)
 	game.width(10)
+	keyboard.i().onPressDo({liga1.jugarLiga()})
 
 	// add assets in asset folder, for example, for the background
   // game.boardGround("fondo2.jpg")
